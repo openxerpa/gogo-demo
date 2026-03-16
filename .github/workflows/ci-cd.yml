@@ -97,7 +97,7 @@ jobs:
                 ansible.builtin.command:
                   cmd: docker login ghcr.io -u {{ deploy_registry_user }} -p {{ deploy_registry_token }}
                 no_log: true
-              - ansible.builtin.command:
+              - ansible.builtin.shell:
                   cmd: docker compose pull && docker compose up -d
                   chdir: "{{ deploy_dir }}"
           PLAYBOOK
