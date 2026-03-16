@@ -79,13 +79,14 @@ jobs:
             vars:
               deploy_dir: /opt/apps/gogo-demo
               docker_registry: ghcr.io
+              compose_src: ""
             tasks:
               - ansible.builtin.file:
                   path: "{{ deploy_dir }}"
                   state: directory
                   mode: "0755"
               - ansible.builtin.copy:
-                  src: docker-compose.yml
+                  src: "{{ compose_src }}"
                   dest: "{{ deploy_dir }}/docker-compose.yml"
                   mode: "0644"
               - ansible.builtin.copy:
@@ -105,6 +106,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook -i /tmp/inventory.yml /tmp/deploy.yml \
+            -e compose_src=${{ github.workspace }}/docker-compose.yml \
             -e ansible_user=root \
             -e ansible_ssh_private_key_file=~/.ssh/id_rsa \
             -e deploy_registry_user=${{ github.repository_owner }} \
