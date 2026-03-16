@@ -1,0 +1,23 @@
+{
+  "template": "git@github.com:openxerpa/mini-paas-starter.git",
+  "commit": "0aedbf0f94935f83243888b56763ab4dd79517e6",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "project_name": "Gogo demo",
+      "project_slug": "gogo-demo",
+      "description": "A short description of the service",
+      "github_org": "openxerpa",
+      "service_type": "external",
+      "service_port": "3000",
+      "docker_registry": "ghcr.io",
+      "base_domain_dev": "opendays.cc",
+      "base_domain_test": "opendays.cc",
+      "base_domain_prod": "opendays.cc",
+      "memory_limit": "512M",
+      "_template": "git@github.com:openxerpa/mini-paas-starter.git",
+      "_commit": "0aedbf0f94935f83243888b56763ab4dd79517e6"
+    }
+  },
+  "directory": "templates/go-service"
+}
