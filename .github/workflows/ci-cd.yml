@@ -95,7 +95,7 @@ jobs:
                   mode: "0644"
               - ansible.builtin.command:
                   cmd: docker login ghcr.io -u {{ deploy_registry_user }} -p {{ deploy_registry_token }}
-                  no_log: true
+                no_log: true
               - ansible.builtin.command:
                   cmd: docker compose pull && docker compose up -d
                   chdir: "{{ deploy_dir }}"
