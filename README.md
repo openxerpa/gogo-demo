@@ -25,7 +25,7 @@ Push to `main`, `dev`, or `test`; CI/CD builds and deploys automatically.
 | `PROD_SSH_KEY` | SSH private key for prod |
 | `DEV_SSH_KEY` | SSH private key for dev |
 | `TEST_SSH_KEY` | SSH private key for test |
-| `DEPLOY_REGISTRY_TOKEN` | GHCR token for pulling images (shared across envs) |
+| `DEPLOY_REGISTRY_TOKEN` | GHCR token for pulling images (optional; defaults to `GITHUB_TOKEN` for same-repo) |
 
 ## Environment variables
 
