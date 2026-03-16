@@ -69,7 +69,7 @@ jobs:
 
       - name: Write inventory
         run: |
-          echo "${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_IP || (github.ref == 'refs/heads/dev' && secrets.DEV_SERVER_IP || secrets.TEST_SERVER_IP) }}," > /tmp/inventory.yml
+          echo "${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_IP || (github.ref == 'refs/heads/dev' && secrets.DEV_SERVER_IP || secrets.TEST_SERVER_IP) }}" > /tmp/inventory.yml
 
       - name: Write deploy playbook
         run: |
