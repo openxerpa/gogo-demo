@@ -49,18 +49,8 @@ jobs:
       - name: Install Ansible
         run: pip install ansible
 
-      - name: Write SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-
-      - name: Write inventory
-        run: |
-          echo "${{ secrets.DEPLOY_HOST }}," > /tmp/inventory.yml
-
-      # Env mapping: main → prod, dev → dev, test → test. Customize as needed.
-      - name: Set TRAEFIK_HOST from branch
+      # Env mapping: main → prod, dev → dev, test → test. Per-env: PROD/DEV/TEST_SERVER_IP, PROD/DEV/TEST_SSH_KEY.
+      - name: Set env from branch
         id: env
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
@@ -70,6 +60,16 @@ jobs:
           else
             echo "traefik_host=gogo-demo-test.opendays.cc" >> $GITHUB_OUTPUT
           fi
+
+      - name: Write SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ github.ref == 'refs/heads/main' && secrets.PROD_SSH_KEY || (github.ref == 'refs/heads/dev' && secrets.DEV_SSH_KEY || secrets.TEST_SSH_KEY) }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Write inventory
+        run: |
+          echo "${{ github.ref == 'refs/heads/main' && secrets.PROD_SERVER_IP || (github.ref == 'refs/heads/dev' && secrets.DEV_SERVER_IP || secrets.TEST_SERVER_IP) }}," > /tmp/inventory.yml
 
       - name: Write deploy playbook
         run: |
@@ -105,7 +105,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook -i /tmp/inventory.yml /tmp/deploy.yml \
-            -e ansible_user=${{ secrets.DEPLOY_USER }} \
+            -e ansible_user=root \
             -e ansible_ssh_private_key_file=~/.ssh/id_rsa \
             -e deploy_registry_user=${{ github.repository_owner }} \
             -e deploy_registry_token=${{ secrets.DEPLOY_REGISTRY_TOKEN }} \
